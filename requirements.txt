@@ -1,0 +1,4 @@
+jieba>=0.42.1,<0.43
+tzlocal>=5,<6
+tzdata>=2025.1
+zstandard>=0.23,<1; python_version < "3.14"

@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "schemaVersion": 2,
+    "generatedAt": null,
+    "timezone": null,
+    "uniqueMessages": 0,
+    "totalMessages": 0,
+    "lastDay": null
+  },
+  "sources": {
+    "TRAE": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "TRAE CN 应用数据库探测；加密或未知格式可手动导入标准消息 JSON"
+    },
+    "Codex": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "CLI / Desktop rollout JSONL"
+    },
+    "Claude Code": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "projects JSONL；排除子代理、工具结果与自动活动摘要"
+    },
+    "Gemini CLI": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "tmp/*/chats 会话 JSON / JSONL"
+    },
+    "Cursor": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "IDE bubble SQLite / CLI agent-transcripts"
+    },
+    "GitHub Copilot Chat": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "VS Code chatSessions / Copilot turns SQLite"
+    },
+    "Grok": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "Grok Build ACP JSONL；网页 Grok 需标准消息导入"
+    },
+    "Qwen Code": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "projects/*/chats JSONL"
+    },
+    "Kimi Code": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "sessions/*/*/agents/main/wire.jsonl"
+    },
+    "CodeBuddy / WorkBuddy": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "CodeBuddy / WorkBuddy projects JSONL"
+    },
+    "DeepSeek Harness": {
+      "state": "absent",
+      "detail": "运行启动脚本后扫描本机记录",
+      "messages": 0,
+      "files": 0,
+      "coverage": "sessions/session*.jsonl / .jsonl.zstd；仅真人 user/message"
+    }
+  },
+  "modes": {
+    "raw": {
+      "words": []
+    },
+    "refined": {
+      "words": []
+    }
+  },
+  "buckets": [],
+  "stopwords": []
+}
