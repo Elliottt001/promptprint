@@ -19,6 +19,8 @@ class PackageTests(unittest.TestCase):
                 self.assertNotIn('/Users/',json.dumps(data))
                 self.assertIn('ai-dialogue-wordcloud/start.cmd',names)
                 self.assertIn('ai-dialogue-wordcloud/start.sh',names)
+                self.assertIn('ai-dialogue-wordcloud/assets/preview.png',names)
+                self.assertTrue(archive.read('ai-dialogue-wordcloud/assets/preview.png').startswith(b'\x89PNG\r\n\x1a\n'))
 
     # 添加到 tests/test_package.py 的 PackageTests。
     def test_portable_archive_contains_all_personal_feature_modules(self):
