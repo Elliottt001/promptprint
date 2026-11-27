@@ -27,9 +27,10 @@ class PackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             output=build_package(Path(tmp)/'portable.zip')
             with zipfile.ZipFile(output) as archive:
-                for filename in ('settings.mjs','data-model.mjs','insights.mjs','features-ui.mjs','cloud-layout.mjs','share.mjs'):
+                for filename in ('settings.mjs','data-model.mjs','insights.mjs','features-ui.mjs','cloud-layout.mjs','share.mjs','ui.mjs','navigation.mjs','cloud-view.mjs','dialogs.mjs'):
                     self.assertIn('ai-dialogue-wordcloud/web/'+filename,archive.namelist())
                 data=json.loads(archive.read('ai-dialogue-wordcloud/web/data.json'))
                 self.assertEqual(data['buckets'],[])
                 self.assertEqual(data['meta']['uniqueMessages'],0)
                 self.assertFalse(any('settings.json' in name for name in archive.namelist()))
+                self.assertFalse(any('.local-preview' in name or 'demo-data' in name or '/design/' in name or '/design-demos/' in name for name in archive.namelist()))

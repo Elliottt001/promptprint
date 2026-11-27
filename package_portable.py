@@ -6,7 +6,7 @@ from pathlib import Path
 from adapters import CATALOG
 
 ROOT=Path(__file__).resolve().parent
-RUNTIME_FILES=('adapters.py','models.py','wordcloud_data.py','launch.py','requirements.txt','start.sh','start.cmd','README.md','assets/preview.png','web/index.html','web/styles.css','web/app.js','web/data-model.mjs','web/settings.mjs','web/insights.mjs','web/features-ui.mjs','web/cloud-layout.mjs','web/share.mjs')
+RUNTIME_FILES=('adapters.py','models.py','wordcloud_data.py','launch.py','requirements.txt','start.sh','start.cmd','README.md','assets/preview.png','web/index.html','web/styles.css','web/app.js','web/data-model.mjs','web/settings.mjs','web/insights.mjs','web/features-ui.mjs','web/cloud-layout.mjs','web/share.mjs','web/ui.mjs','web/navigation.mjs','web/cloud-view.mjs','web/dialogs.mjs','web/components.css')
 
 
 def build_package(output):

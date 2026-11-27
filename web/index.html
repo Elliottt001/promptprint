@@ -1,216 +1,506 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#F5F5FA">
-  <title>聊了什么 · Promptprint</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <symbol id="icon-cloud" viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-1-7.9A6 6 0 0 1 17.6 8a5 5 0 0 1 .4 10Z"/></symbol>
-    <symbol id="icon-recap" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="3"/><path d="M8 2v4m8-4v4M4 10h16m-12 4h3m-3 3h6"/></symbol>
-    <symbol id="icon-trend" viewBox="0 0 24 24"><path d="M4 4v16h16M7 15l4-5 4 3 5-7m-5 0h5v5"/></symbol>
-    <symbol id="icon-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></symbol>
-    <symbol id="icon-share" viewBox="0 0 24 24"><path d="M12 16V3m-4 4 4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></symbol>
-    <symbol id="icon-source" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4m-5-9 3-3 3 3 4-5"/></symbol>
-    <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></symbol>
-  </svg>
-  <a class="skip-link" href="#cloud-stage">跳到词云</a>
-  <aside class="sidebar" aria-label="主导航">
-    <a class="brand" href="#cloud-stage" aria-label="聊了什么 · Promptprint，回到词云">
-      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span>聊了什么<small>Promptprint</small><small>AI 对话记录的词云与统计</small></span>
-    </a>
-    <nav class="main-nav" aria-label="浏览我的足迹">
-      <a href="#cloud-stage" class="active" aria-current="location"><svg><use href="#icon-cloud"/></svg>我的词云</a>
-      <a href="#recap-section"><svg><use href="#icon-recap"/></svg>阶段回顾</a>
-      <a href="#compare-section"><svg><use href="#icon-trend"/></svg>关注变化</a>
-      <a href="#heatmap-section"><svg><use href="#icon-grid"/></svg>活跃日历</a>
-      <a href="#adapter-section"><svg><use href="#icon-source"/></svg>记录来源</a>
-    </nav>
-    <div class="local-note"><svg><use href="#icon-lock"/></svg><strong>只属于你的对话</strong><p>在本机读取与统计，<br>原始对话不会上传。</p><span><i></i>本地运行</span></div>
-    <span class="sidebar-signature">聊了什么 · Promptprint</span>
-  </aside>
-  <main class="app-shell">
-    <header class="hero">
-      <div class="page-heading">
-        <div class="hero-copy"><h1>在对话中，<br class="mobile-break">看到你的关注</h1></div>
-        <button class="share-link" type="button" aria-haspopup="dialog" aria-controls="share-dialog"><svg><use href="#icon-share"/></svg>生成分享卡片</button>
-      </div>
-      <section class="stats" aria-label="数据概览">
-        <article>
-          <strong id="stat-messages">—</strong>
-          <p>条已读取消息</p>
-        </article>
-        <article>
-          <strong id="stat-words">—</strong>
-          <p>个有效词语</p>
-        </article>
-        <article>
-          <strong id="stat-range">—</strong>
-          <p>时间跨度</p>
-        </article>
-        <article class="source-overview">
-          <div id="source-status" class="source-status"></div>
-          <p>个来源已读取</p>
-        </article>
-      </section>
-    </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101d29" />
+    <title>聊了什么 · Promptprint</title>
+    <link rel="stylesheet" href="components.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg
+      class="icon-library"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <symbol id="icon-cloud" viewBox="0 0 24 24">
+        <path d="M7 18a4 4 0 0 1-1-7.9A6 6 0 0 1 17.6 8a5 5 0 0 1 .4 10Z" />
+      </symbol>
+      <symbol id="icon-recap" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="17" rx="3" />
+        <path d="M8 2v4m8-4v4M4 10h16m-12 4h3m-3 3h6" />
+      </symbol>
+      <symbol id="icon-trend" viewBox="0 0 24 24">
+        <path d="M4 4v16h16M7 15l4-5 4 3 5-7m-5 0h5v5" />
+      </symbol>
+      <symbol id="icon-grid" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="6" height="6" rx="1.5" />
+        <rect x="14" y="4" width="6" height="6" rx="1.5" />
+        <rect x="4" y="14" width="6" height="6" rx="1.5" />
+        <rect x="14" y="14" width="6" height="6" rx="1.5" />
+      </symbol>
+      <symbol id="icon-share" viewBox="0 0 24 24">
+        <path
+          d="M12 16V3m-4 4 4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"
+        />
+      </symbol>
+      <symbol id="icon-source" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="13" rx="2" />
+        <path d="M8 21h8m-4-4v4m-5-9 3-3 3 3 4-5" />
+      </symbol>
+      <symbol id="icon-lock" viewBox="0 0 24 24">
+        <rect x="5" y="10" width="14" height="11" rx="3" />
+        <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2" />
+      </symbol>
+    </svg>
 
-    <div class="workspace-grid">
-    <section id="cloud-stage" class="cloud-section" aria-labelledby="cloud-title">
-      <div class="section-heading">
-        <div><h2 id="cloud-title">我的词云</h2><p>那些反复出现的词，是最近的你。</p></div>
-        <div id="mode-toggle" class="segmented" aria-label="词频统计口径">
-          <button class="active" type="button" data-mode="refined" aria-pressed="true"><span>主题提纯</span><small>过滤泛词</small></button>
-          <button type="button" data-mode="raw" aria-pressed="false"><span>原始词频</span><small>保留泛词</small></button>
-        </div>
-      </div>
-
-      <div class="control-deck">
-        <div class="period-row">
-          <label class="period-select">时间范围
-            <select id="period-kind" aria-label="时间范围">
-              <option value="all">全部</option><option value="day">每天</option><option value="week">每周</option><option value="month">每月</option><option value="year">每年</option>
-            </select>
-          </label>
-          <div class="period-navigation">
-            <button id="period-prev" type="button" aria-label="上一周期">←</button>
-            <input id="period-anchor" type="date" aria-label="选择周期日期" disabled>
-            <button id="period-next" type="button" aria-label="下一周期">→</button>
-          </div>
-          <p id="period-summary" aria-live="polite">全部时间</p>
-        </div>
-        <div class="tool-row">
-          <fieldset id="source-filters" class="source-filters" aria-label="按产品筛选">
-            <legend>来源</legend>
-          </fieldset>
-
-          <label class="search-field" aria-label="搜索词语">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg>
-            <input id="word-search" type="search" placeholder="搜索词语" autocomplete="off">
-          </label>
-
-          <label class="range-field" aria-label="显示词语数量">
-            <span>最多 <output id="limit-output">90</output> 词</span>
-            <input id="word-limit" type="range" min="40" max="160" step="10" value="90">
-          </label>
-
-          <button id="export-png" class="export-button" type="button" aria-label="将当前词云导出为 PNG">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3"></path></svg>
-            导出词云
+    <a class="skip-link" href="#cloud-stage">跳到主内容</a>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#cloud-stage"
+          >Promptprint<span class="sr-only">聊了什么</span></a
+        >
+        <nav class="main-nav" aria-label="主导航">
+          <a href="#cloud-stage" class="active" aria-current="page">我的词云</a
+          ><a href="#recap-section">阶段回顾</a
+          ><a href="#compare-section">关注变化</a
+          ><a href="#heatmap-section">活跃日历</a>
+        </nav>
+        <div class="top-meta">
+          <span id="data-mode" class="badge">本地数据</span
+          ><button type="button" class="share-link">
+            <svg><use href="#icon-share" /></svg>分享词云
           </button>
         </div>
-      </div>
-
-      <div class="visual-frame">
-        <svg id="word-cloud" role="img" aria-label="交互式词云" preserveAspectRatio="xMidYMid meet"></svg>
-        <div id="empty-state" class="empty-state" hidden>
-          <span aria-hidden="true">◌</span>
-          <strong>没有找到相符的词</strong>
-          <p>试试清空搜索或选择更多来源。</p>
+      </header>
+      <section id="cloud-stage" data-view-panel aria-labelledby="cloud-title">
+        <div class="page-heading">
+          <div>
+            <h1 id="cloud-title">每次提问，都有回声。</h1>
+            <p>看看这段时间，什么占据了你的关注。</p>
+          </div>
+          <div class="period-navigation">
+            <button id="period-prev" type="button" aria-label="上一周期">
+              ‹
+            </button>
+            <div class="period-date">
+              <span id="period-label" aria-hidden="true">选择日期</span
+              ><input
+                id="period-anchor"
+                type="month"
+                aria-label="选择周期日期"
+              />
+            </div>
+            <button id="period-next" type="button" aria-label="下一周期">
+              ›
+            </button>
+          </div>
+        </div>
+        <div class="field-stage">
+          <div class="visual-frame">
+            <svg
+              id="word-cloud"
+              role="group"
+              aria-label="交互词云；点击词语查看频次和轨迹"
+            ></svg>
+            <div id="empty-state" class="empty-state" hidden>
+              <strong>正在整理你和 AI 聊了什么…</strong>
+              <p>读取聚合记录，不读取原始对话。</p>
+              <div class="empty-actions">
+                <button id="reset-filters" type="button" hidden>
+                  恢复全部来源</button
+                ><button id="retry-data" type="button" hidden>重新加载</button
+                ><a id="demo-link" href="?demo=1" hidden>查看演示数据</a>
+              </div>
+            </div>
+          </div>
+          <aside class="canvas-edge">
+            <strong id="stat-messages">—</strong>
+            <p>条用户消息<br />汇成这片词云</p>
+            <button id="explore-word" type="button">
+              先从一个词开始<br />查看它的时间轨迹
+            </button>
+          </aside>
+        </div>
+        <div class="visual-caption">
+          <span id="period-summary">正在加载</span
+          ><span>词越大，提起越多 · 点击探索</span>
         </div>
         <p id="cloud-status" class="sr-only" aria-live="polite"></p>
-        <div class="visual-caption"><span><i></i>颜色对应对话来源</span><span>点击词语，查看时间轨迹</span></div>
-      </div>
-    </section>
-    <aside class="insight-rail" aria-label="当前词云概览">
-      <section class="ranking-panel"><h2>反复提起的词</h2><ol id="top-word-list" class="word-ranking"></ol><a class="text-link" href="#compare-section">看看关注有什么变化<svg><use href="#icon-trend"/></svg></a></section>
-      <section class="distribution-panel"><h2>对话来自哪里</h2><div id="source-distribution"></div><a class="text-link" href="#adapter-section">查看全部记录来源<svg><use href="#icon-source"/></svg></a></section>
-      <div class="reading-note"><svg><use href="#icon-cloud"/></svg><p>词越大，提起得越多。<br>换个时间范围，<br>看看关注如何变化。</p></div>
-    </aside>
-    </div>
-    <div class="analysis-heading"><h2>看见变化</h2><p>从时间、频率和对话来源，回看你的 AI 足迹。</p></div>
-    <section id="recap-section" class="feature-panel recap-panel" aria-labelledby="recap-title">
-      <h2 id="recap-title">我的 AI 回顾</h2>
-      <div class="feature-controls">
-        <label>回顾周期 <select id="recap-kind"><option value="month">每月</option><option value="year">每年</option></select></label>
-        <label>选择月份或年份 <input id="recap-anchor" type="month"></label>
-        <button id="recap-view-cloud" type="button">查看这个周期的词云</button>
-      </div>
-      <p id="recap-status" aria-live="polite"></p><p id="recap-range"></p>
-      <div class="feature-metrics">
-        <div><strong id="recap-messages">0</strong><span>条消息</span></div>
-        <div><strong id="recap-active-days">0</strong><span>个活跃日</span></div>
-        <div><strong id="recap-longest-streak">0</strong><span>天最长连续活跃</span></div>
-      </div>
-      <p id="recap-peak-days"></p>
-      <div class="recap-breakdown">
-        <div><h3>最常提起的 5 个词</h3><div id="recap-top-words"></div></div>
-        <div><h3>来源分布</h3><div id="recap-source-stats"></div></div>
-        <div><h3>相较上一周期</h3><p id="recap-change-status"></p><div id="recap-sentences"></div></div>
-      </div>
-    </section>
-    <section id="compare-section" class="feature-panel compare-panel" aria-labelledby="compare-title">
-      <h2 id="compare-title">关注变化</h2>
-      <div class="feature-controls">
-        <label>快捷比较 <select id="compare-preset"><option value="custom">自选区间</option><option value="week">本周与上周</option><option value="month" selected>本月与上月</option><option value="year">本年与上年</option></select></label>
-        <label>起始日期 <input id="compare-a-start" type="date"></label><label>结束日期 <input id="compare-a-end" type="date"></label>
-        <label>起始日期 <input id="compare-b-start" type="date"></label><label>结束日期 <input id="compare-b-end" type="date"></label>
-        <button id="compare-apply" type="button">比较</button>
-      </div>
-      <p id="compare-status" aria-live="polite"></p><p id="compare-counts"></p>
-      <div class="feature-columns">
-        <div><h3>新出现</h3><div id="compare-new"></div></div><div><h3>升温</h3><div id="compare-rising"></div></div>
-        <div><h3>降温</h3><div id="compare-falling"></div></div><div><h3>消失</h3><div id="compare-disappeared"></div></div>
-      </div>
-    </section>
-    <section id="heatmap-section" class="feature-panel calendar-panel" aria-labelledby="heatmap-title">
-      <h2 id="heatmap-title">提问活跃日历</h2>
-      <div class="feature-controls"><label>年份 <input id="heatmap-year" type="number" min="1" max="9998"></label></div>
-      <p id="heatmap-status" aria-live="polite"></p><p id="heatmap-summary"></p>
-      <div class="heatmap-scroll"><div id="heatmap-grid" aria-label="每日已读取消息数量"></div></div>
-      <div class="calendar-legend"><span>少</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><span>多</span></div><p>周一在最上方。空白仅表示未读取到消息；选择日期查看当天词云。</p>
-    </section>
-    <aside id="detail-panel" class="detail-panel" aria-label="词语详情" aria-hidden="true" inert>
-      <button id="detail-close" class="detail-close" type="button" aria-label="关闭词语详情">×</button>
-      <p class="detail-kicker">词语详情</p>
-      <h2 id="detail-word">—</h2>
-      <div class="detail-count"><strong id="detail-count">0</strong><span>次出现</span></div>
-      <section>
-        <h3>来源分布</h3>
-        <div id="detail-sources" class="detail-sources"></div>
+        <div class="control-deck">
+          <button
+            type="button"
+            id="source-filter-open"
+            aria-haspopup="dialog"
+            aria-controls="source-filter-dialog"
+          >
+            全部来源 <span>⌄</span>
+          </button>
+          <div id="mode-toggle" class="segmented" aria-label="词频统计口径">
+            <button
+              type="button"
+              data-mode="refined"
+              class="active"
+              aria-pressed="true"
+            >
+              主题提纯</button
+            ><button type="button" data-mode="raw" aria-pressed="false">
+              原始词频
+            </button>
+          </div>
+          <label class="search-field"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10" cy="10" r="6" />
+              <path d="m15 15 6 6" /></svg
+            ><input
+              id="word-search"
+              type="search"
+              placeholder="找一个词"
+              aria-label="搜索词语"
+              autocomplete="off"
+          /></label>
+        </div>
+        <section class="activity-timeline" aria-label="当前范围的对话节奏">
+          <div class="timeline-heading">
+            <span id="activity-title">这段时间的对话节奏</span
+            ><span>点击某一天，查看词云</span>
+          </div>
+          <div id="activity-bars" class="activity-bars"></div>
+          <div id="activity-ticks" class="activity-ticks"></div>
+        </section>
+        <section class="summary">
+          <div>
+            <span class="view-kicker">这一段时间，留下的关注</span>
+            <h2>从每一次提问，<br />看见一点点变化。</h2>
+            <p>词语记录你提起过什么，时间记录这些关注怎样延续。</p>
+          </div>
+          <div class="summary-stats">
+            <div>
+              <strong id="summary-messages">—</strong><span>条用户消息</span>
+            </div>
+            <div>
+              <strong id="summary-days">—</strong><span>天记录跨度</span>
+            </div>
+            <div><strong id="stat-words">—</strong><span>个有效词语</span></div>
+            <svg
+              id="summary-trend"
+              class="summary-trend"
+              viewBox="0 0 600 100"
+              role="img"
+              aria-label="当前时间范围的活跃轨迹"
+            ></svg
+            ><span class="trend-caption">当前范围的活跃节奏</span>
+          </div>
+          <div class="summary-actions">
+            <a href="#recap-section" class="text-action">打开阶段回顾</a
+            ><button type="button" id="export-png" class="text-action">
+              导出当前词云
+            </button>
+          </div>
+        </section>
+        <section class="overview-grid" aria-label="词云辅助信息">
+          <div class="ranking-panel">
+            <h2>反复提起</h2>
+            <ol id="top-word-list"></ol>
+          </div>
+          <div class="distribution-panel">
+            <h2>对话来自哪里</h2>
+            <div id="source-distribution"></div>
+            <a class="text-action" href="#adapter-section">查看记录来源</a>
+          </div>
+        </section>
       </section>
-      <section>
-        <h3>时间轨迹</h3>
-        <svg id="detail-trend" class="detail-trend" viewBox="0 0 320 120" role="img" aria-label="月度使用趋势"></svg>
+      <section
+        id="recap-section"
+        data-view-panel
+        hidden
+        class="feature-panel recap-panel"
+        aria-labelledby="recap-title"
+      >
+        <span class="view-kicker">阶段回顾</span>
+        <h1 id="recap-title">一月，反复提起的事。</h1>
+        <p class="view-intro">
+          从消息、词频与活跃节奏，回看这段时间。所有结论都来自当前聚合记录。
+        </p>
+        <div class="feature-controls">
+          <label
+            >回顾周期
+            <select id="recap-kind">
+              <option value="month">每月</option>
+              <option value="year">每年</option>
+            </select></label
+          >
+          <label>选择月份或年份 <input id="recap-anchor" type="month" /></label>
+          <button id="recap-view-cloud" type="button">
+            查看这个周期的词云
+          </button>
+        </div>
+        <button type="button" class="text-action recap-share">
+          分享这段回顾
+        </button>
+        <p id="recap-status" aria-live="polite"></p>
+        <p id="recap-range"></p>
+        <div class="feature-metrics">
+          <div><strong id="recap-messages">0</strong><span>条消息</span></div>
+          <div>
+            <strong id="recap-active-days">0</strong><span>个活跃日</span>
+          </div>
+          <div>
+            <strong id="recap-longest-streak">0</strong
+            ><span>天最长连续活跃</span>
+          </div>
+        </div>
+        <p id="recap-peak-days"></p>
+        <div class="recap-breakdown">
+          <div>
+            <h3>最常提起的 5 个词</h3>
+            <div id="recap-top-words"></div>
+          </div>
+          <div>
+            <h3>来源分布</h3>
+            <div id="recap-source-stats"></div>
+          </div>
+          <div>
+            <h3>相较上一周期</h3>
+            <p id="recap-change-status"></p>
+            <div id="recap-sentences"></div>
+          </div>
+        </div>
       </section>
+      <section
+        id="compare-section"
+        data-view-panel
+        hidden
+        class="feature-panel compare-panel"
+        aria-labelledby="compare-title"
+      >
+        <span class="view-kicker">关注变化</span>
+        <h1 id="compare-title">哪些词，更常出现了？</h1>
+        <p class="view-intro">
+          比较两个时期的词频占比，看见新出现、升温、降温与消失的关注。
+        </p>
+        <div class="feature-controls">
+          <label
+            >快捷比较
+            <select id="compare-preset">
+              <option value="custom">自选区间</option>
+              <option value="week">本周与上周</option>
+              <option value="month" selected>本月与上月</option>
+              <option value="year">本年与上年</option>
+            </select></label
+          >
+          <label>前一时期开始 <input id="compare-a-start" type="date" /></label
+          ><label>前一时期结束 <input id="compare-a-end" type="date" /></label>
+          <label>后一时期开始 <input id="compare-b-start" type="date" /></label
+          ><label>后一时期结束 <input id="compare-b-end" type="date" /></label>
+          <button id="compare-apply" type="button">比较</button>
+        </div>
+        <p id="compare-status" aria-live="polite"></p>
+        <p id="compare-counts"></p>
+        <div class="compare-results">
+          <div>
+            <h3>新出现</h3>
+            <div id="compare-new"></div>
+          </div>
+          <div>
+            <h3>升温</h3>
+            <div id="compare-rising"></div>
+          </div>
+          <div>
+            <h3>降温</h3>
+            <div id="compare-falling"></div>
+          </div>
+          <div>
+            <h3>消失</h3>
+            <div id="compare-disappeared"></div>
+          </div>
+        </div>
+      </section>
+      <section
+        id="heatmap-section"
+        data-view-panel
+        hidden
+        class="feature-panel calendar-panel"
+        aria-labelledby="heatmap-title"
+      >
+        <span class="view-kicker">活跃日历</span>
+        <h1 id="heatmap-title">每次对话，都留下一小格。</h1>
+        <p class="view-intro">颜色越深，已读取消息越多；空白表示未读到记录。</p>
+        <div class="feature-controls">
+          <label
+            >年份 <input id="heatmap-year" type="number" min="1" max="9998"
+          /></label>
+        </div>
+        <p id="heatmap-status" aria-live="polite"></p>
+        <p id="heatmap-summary"></p>
+        <div id="heatmap-months" aria-hidden="true"></div>
+        <div class="heatmap-scroll">
+          <div id="heatmap-grid" aria-label="每日已读取消息数量"></div>
+        </div>
+        <div class="calendar-legend">
+          <span>少</span><i data-level="0"></i><i data-level="1"></i
+          ><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i
+          ><span>多</span>
+        </div>
+        <p>周一在最上方。空白仅表示未读取到消息；选择日期查看当天词云。</p>
+      </section>
+
+      <section
+        id="adapter-section"
+        data-view-panel
+        hidden
+        aria-labelledby="adapter-title"
+        class="feature-panel"
+      >
+        <span class="view-kicker">记录来源</span>
+        <h1 id="adapter-title">知道哪些记录被看见。</h1>
+        <p class="view-intro">
+          只统计能可靠识别的用户文字。无法读取的记录不会进入词频；原始对话不会上传。
+        </p>
+        <p id="source-summary" class="status-note"></p>
+        <div id="source-diagnostics"></div>
+        <svg
+          id="source-cloud"
+          role="img"
+          aria-label="来源的消息数量"
+          preserveAspectRatio="xMidYMid meet"
+        ></svg>
+        <div class="import-note">
+          <h2>没有找到记录？</h2>
+          <p>
+            确认本机已有受支持客户端的对话记录；手动导入请使用 README 中的标准
+            JSON 格式，再重新启动。网页不执行扫描或上传。
+          </p>
+          <a href="#cloud-stage" class="text-action">返回我的词云</a>
+        </div>
+      </section>
+      <footer>
+        <span>Promptprint<br />本地记录，只属于你。</span
+        ><a href="#adapter-section">记录来源与读取状态</a>
+      </footer>
+    </main>
+    <dialog
+      id="detail-panel"
+      class="detail-panel"
+      aria-labelledby="detail-word"
+    >
+      <div class="dialog-heading">
+        <h2 id="detail-word">词语详情</h2>
+        <button id="detail-close" type="button" aria-label="关闭词语详情">
+          ×
+        </button>
+      </div>
+      <span class="view-kicker">在当前范围，你提起了</span>
+      <div class="detail-count">
+        <strong id="detail-count">0</strong><span>次</span>
+      </div>
+      <p>同一条消息可以多次提起一个词。</p>
+      <svg
+        id="detail-trend"
+        viewBox="0 0 600 140"
+        role="img"
+        aria-label="当前范围的时间轨迹"
+      ></svg>
+      <div id="detail-trend-labels" class="trend-labels"></div>
+      <h3>来自哪些记录</h3>
+      <div id="detail-sources"></div>
       <p class="detail-note">只展示聚合频次，不包含任何对话原文。</p>
-    </aside>
-
-    <section id="adapter-section" class="adapter-section" aria-labelledby="adapter-title">
-      <div class="section-heading">
-        <div><h2 id="adapter-title">记录来源</h2></div>
-
+    </dialog>
+    <dialog id="source-filter-dialog" aria-labelledby="source-filter-title">
+      <div class="dialog-heading">
+        <h2 id="source-filter-title">哪些记录参与统计</h2>
+        <button
+          id="source-filter-close"
+          type="button"
+          aria-label="关闭来源筛选"
+        >
+          ×
+        </button>
       </div>
-      <svg id="source-cloud" role="img" aria-label="记录来源词云" preserveAspectRatio="xMidYMid meet"></svg>
-    </section>
-    <footer>
-      <p><span></span>所有统计均在本机完成 · 原始对话从未写入网页</p>
-      <p>聊了什么 · Promptprint</p>
-    </footer>
-  </main>
-
-  <dialog id="share-dialog" class="feature-panel share-dialog" aria-labelledby="share-dialog-title">
-    <form id="share-form">
-      <div class="share-dialog-heading"><h2 id="share-dialog-title">生成分享卡片</h2><button id="share-close" type="button" aria-label="关闭分享选项">×</button></div>
-      <div class="feature-controls">
-        <label>分享内容 <select id="share-kind"><option value="cloud">当前词云</option><option value="recap">月／年回顾</option></select></label>
-        <label>图片尺寸 <select id="share-size"><option value="square">正方形 1080×1080</option><option value="portrait">竖版 1080×1920</option><option value="landscape" selected>横版 1600×1000</option></select></label>
-        <label>标题 <input id="share-title" maxlength="80" value="我的 AI 足迹"></label>
-        <label><input id="share-show-range" type="checkbox" checked>显示时间范围</label>
-        <label><input id="share-show-messages" type="checkbox" checked>显示消息数</label>
-        <label><input id="share-show-top" type="checkbox" checked>显示 Top 词</label>
-        <label><input id="share-show-sources" type="checkbox">显示来源信息</label>
-        <button id="share-export" type="submit">下载 PNG</button>
+      <fieldset id="source-filters"><legend>来源</legend></fieldset>
+      <div class="filter-options">
+        <label for="period-kind">时间范围</label
+        ><select id="period-kind">
+          <option value="all">全部</option>
+          <option value="day">每天</option>
+          <option value="week">每周</option>
+          <option value="month">每月</option>
+          <option value="year">每年</option></select
+        ><label for="word-limit"
+          >显示 <output id="limit-output">24</output> 个词</label
+        ><input
+          id="word-limit"
+          type="range"
+          min="12"
+          max="160"
+          step="4"
+          value="24"
+        />
       </div>
-      <p id="share-status" role="status" aria-live="polite"></p>
-    </form>
-  </dialog>
-
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="app.js"></script>
-</body>
+      <button id="source-filter-apply" type="button" class="primary">
+        完成筛选
+      </button>
+      <p class="dialog-note">筛选即时应用。关闭后保留当前选择。</p>
+    </dialog>
+    <dialog id="share-dialog" aria-labelledby="share-dialog-title">
+      <form id="share-form">
+        <div class="dialog-heading">
+          <h2 id="share-dialog-title">把这段关注带走</h2>
+          <button id="share-close" type="button" aria-label="关闭分享选项">
+            ×
+          </button>
+        </div>
+        <div class="share-layout">
+          <div class="share-preview-frame">
+            <canvas
+              id="share-preview"
+              role="img"
+              aria-label="分享卡片预览"
+            ></canvas>
+            <p id="share-preview-empty" hidden>当前没有可分享的内容</p>
+          </div>
+          <div class="share-options">
+            <label
+              >分享内容<select id="share-kind">
+                <option value="cloud">当前词云</option>
+                <option value="recap">月／年回顾</option>
+              </select></label
+            ><label
+              >画面比例<select id="share-size">
+                <option value="square">正方形 · 1:1</option>
+                <option value="portrait">竖版 · 3:4</option>
+                <option value="landscape">横版 · 3:2</option>
+              </select></label
+            ><label
+              >标题<input
+                id="share-title"
+                maxlength="80"
+                value="我的 AI 足迹" /></label
+            ><label class="check"
+              ><input
+                id="share-show-sources"
+                type="checkbox"
+              />显示记录来源</label
+            >
+            <details>
+              <summary>其他分享内容</summary>
+              <label class="check"
+                ><input
+                  id="share-show-range"
+                  type="checkbox"
+                  checked
+                />显示时间范围</label
+              ><label class="check"
+                ><input
+                  id="share-show-messages"
+                  type="checkbox"
+                  checked
+                />显示消息数</label
+              ><label class="check"
+                ><input id="share-show-top" type="checkbox" />显示 Top 词</label
+              >
+            </details>
+            <p>分享默认隐藏来源。请检查词语后再导出。</p>
+            <button id="share-export" type="submit" class="primary">
+              下载 PNG
+            </button>
+            <p id="share-status" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+      </form>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="app.js"></script>
+  </body>
 </html>

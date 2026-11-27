@@ -18,6 +18,12 @@ FIXTURE={
   {'day':'unknown','source':'Codex','messageCount':1,'words':{'unknownword':1}},
  ]}
 
+def select_period(page, kind):
+    page.click('#source-filter-open')
+    page.select_option('#period-kind', kind)
+    page.click('#source-filter-apply')
+
+
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self,*args): pass
 
@@ -41,7 +47,7 @@ class BrowserInteractionTests(unittest.TestCase):
             page.route('**/data.json',lambda route:route.fulfill(content_type='application/json',body=json.dumps(FIXTURE)))
             page.goto(f'http://127.0.0.1:{self.server.server_port}/')
             expect(page.locator('#stat-messages')).to_have_text('3')
-            page.select_option('#period-kind','day')
+            select_period(page,'day')
             expect(page.locator('#period-summary')).to_have_text('2026-01-01')
             expect(page.locator('.word')).to_have_count(1)
             expect(page.locator('.word')).to_have_attribute('data-word','figma')
@@ -57,9 +63,11 @@ class BrowserInteractionTests(unittest.TestCase):
             with page.expect_download() as download:
                 page.click('#export-png')
             self.assertTrue(download.value.suggested_filename.endswith('.png'))
-            page.fill('#word-search','');page.select_option('#period-kind','week')
+            page.fill('#word-search','');select_period(page,'week')
             expect(page.locator('#period-summary')).to_have_text('2025-12-29 — 2026-01-04')
+            page.click('#source-filter-open')
             page.locator('label:has(input[data-source="Codex"])').click()
+            page.click('#source-filter-apply')
             expect(page.locator('#stat-messages')).to_have_text('1')
             self.assertEqual(errors,[])
             browser.close()
@@ -71,7 +79,7 @@ class BrowserInteractionTests(unittest.TestCase):
             page=browser.new_page(viewport={'width':390,'height':844},is_mobile=True)
             page.route('**/data.json',lambda route:route.fulfill(content_type='application/json',body=json.dumps(FIXTURE)))
             page.goto(f'http://127.0.0.1:{self.server.server_port}/')
-            page.select_option('#period-kind','month')
+            select_period(page,'month')
             expect(page.locator('#period-anchor')).to_have_attribute('type','month')
             page.fill('#period-anchor','2025-12');page.locator('#period-anchor').dispatch_event('change')
             expect(page.locator('#stat-messages')).to_have_text('1')
@@ -86,7 +94,7 @@ class BrowserInteractionTests(unittest.TestCase):
             page.route('**/data.json',lambda route:route.fulfill(content_type='application/json',body=json.dumps(FIXTURE)))
             page.goto(f'http://127.0.0.1:{self.server.server_port}/')
             expect(page.locator('#source-distribution')).to_contain_text('67%')
-            page.select_option('#period-kind','day')
+            select_period(page,'day')
             expect(page.locator('#top-word-list button')).to_have_count(1)
             expect(page.locator('#top-word-list')).to_contain_text('figma')
             expect(page.locator('#source-distribution')).to_contain_text('100%')
@@ -112,6 +120,6 @@ class BrowserInteractionTests(unittest.TestCase):
             page.keyboard.press('Escape')
             page.locator('.main-nav a[href="#cloud-stage"]').click()
             expect(page.locator('#cloud-title')).to_be_in_viewport()
-            page.select_option('#period-kind','month')
+            select_period(page,'month')
             self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'),320)
             browser.close()

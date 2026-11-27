@@ -42,7 +42,7 @@ class PersonalFeatureTests(unittest.TestCase):
         from playwright.sync_api import expect
         old_settings={'schemaVersion':1,'hiddenWords':['python'],'aliasGroups':[],'productLabels':{'Codex':'学习'}}
         with feature_page(init_script=f"localStorage.setItem('lingua-orbit.settings.v1', {json.dumps(json.dumps(old_settings))});") as page:
-            for selector in ['#settings-panel','#product-section','#hide-word','#share-panel','#share-preview']:
+            for selector in ['#settings-panel','#product-section','#hide-word','#share-panel']:
                 expect(page.locator(selector)).to_have_count(0)
             expect(page.locator('[data-word="python"]')).to_have_count(1)
             expect(page.locator('#stat-messages')).to_have_text('15')
@@ -50,15 +50,18 @@ class PersonalFeatureTests(unittest.TestCase):
     def test_recap_compare_and_heatmap(self):
         from playwright.sync_api import expect
         with feature_page() as page:
+            page.click('.main-nav a[href="#recap-section"]')
             page.fill('#recap-anchor','2026-01');page.locator('#recap-anchor').dispatch_event('change')
             expect(page.locator('#recap-messages')).to_have_text('10')
             expect(page.locator('#recap-active-days')).to_have_text('2')
             expect(page.locator('#recap-longest-streak')).to_have_text('2')
+            page.click('.main-nav a[href="#compare-section"]')
             for field,value in [('compare-a-start','2026-01-01'),('compare-a-end','2026-01-02'),('compare-b-start','2026-02-01'),('compare-b-end','2026-02-01')]:
                 page.fill('#'+field,value)
             page.click('#compare-apply')
             expect(page.locator('#compare-counts')).to_have_text('10 条消息 vs 5 条消息')
             expect(page.locator('[data-change-word="feishu"]')).to_have_text('feishu · 3 次 → 6 次')
+            page.click('.main-nav a[href="#heatmap-section"]')
             page.fill('#heatmap-year','2026');page.locator('#heatmap-year').dispatch_event('change')
             expect(page.locator('#heatmap-grid button')).to_have_count(365)
             page.locator('#heatmap-grid [data-day="2026-01-02"]').focus();page.keyboard.press('Enter')
@@ -69,6 +72,7 @@ class PersonalFeatureTests(unittest.TestCase):
     def test_invalid_range_retains_previous_results(self):
         from playwright.sync_api import expect
         with feature_page(viewport={'width':390,'height':844}) as page:
+            page.click('.main-nav a[href="#compare-section"]')
             previous=page.locator('#compare-rising').inner_text()
             page.fill('#compare-a-start','2026-03-01');page.fill('#compare-a-end','2026-01-01')
             page.click('#compare-apply')
@@ -80,6 +84,7 @@ class PersonalFeatureTests(unittest.TestCase):
     def test_source_cloud_contains_only_products_with_message_tooltips(self):
         from playwright.sync_api import expect
         with feature_page() as page:
+            page.click('footer a[href="#adapter-section"]')
             expect(page.locator('#source-cloud text')).to_have_count(2)
             for name,count in [('Codex',10),('Claude Code',5)]:
                 word=page.locator(f'#source-cloud [data-source="{name}"]')
@@ -98,6 +103,7 @@ class PersonalFeatureTests(unittest.TestCase):
             page.reload()
             for width in [320,1440]:
                 page.set_viewport_size({'width':width,'height':900})
+                page.click('footer a[href="#adapter-section"]')
                 expect(page.locator('#source-cloud text')).to_have_count(len(CATALOG))
                 expect(page.locator('#source-cloud title').first).to_have_text('0 条消息')
                 self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'),width)
@@ -106,7 +112,8 @@ class PersonalFeatureTests(unittest.TestCase):
     def test_recap_can_open_its_calendar_word_cloud(self):
         from playwright.sync_api import expect
         with feature_page() as page:
+            page.click('.main-nav a[href="#recap-section"]')
             page.fill('#recap-anchor','2026-01');page.locator('#recap-anchor').dispatch_event('change')
             page.click('#recap-view-cloud')
-            expect(page.locator('#period-summary')).to_have_text('2026-01-01 — 2026-01-31')
+            expect(page.locator('#period-summary')).to_have_text('2026 年 1 月')
             expect(page.locator('#stat-messages')).to_have_text('10')

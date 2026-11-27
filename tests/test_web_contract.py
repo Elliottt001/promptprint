@@ -1,4 +1,5 @@
 import json
+import re
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
@@ -7,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "web"
 REQUIRED_IDS = {
-    "share-dialog", "share-kind", "share-size", "share-form", "share-export",
+    "share-preview", "share-dialog", "share-kind", "share-size", "share-form", "share-export",
     "recap-kind", "recap-anchor", "recap-view-cloud", "compare-apply", "compare-a-start", "compare-b-end", "heatmap-grid",
     "mode-toggle",
     "source-filters",
@@ -49,7 +50,7 @@ class WebContractTests(unittest.TestCase):
         self.assertGreaterEqual(len(self.parser.labels), 4)
 
     def test_removed_sections_are_absent(self):
-        self.assertTrue({"settings-panel", "product-section", "share-panel", "share-preview", "hide-word"}.isdisjoint(self.parser.ids))
+        self.assertTrue({"settings-panel", "product-section", "share-panel", "hide-word"}.isdisjoint(self.parser.ids))
 
     def test_styles_support_reduced_motion_and_focus(self):
         css = (WEB / "styles.css").read_text(encoding="utf-8")
@@ -58,13 +59,15 @@ class WebContractTests(unittest.TestCase):
         self.assertIn(":focus-visible", css)
         self.assertIn("@media", css)
 
-    def test_script_exposes_cloud_interactions(self):
-        javascript = (WEB / "app.js").read_text(encoding="utf-8")
-
-        for name in ("filterWords", "layoutWords", "renderCloud", "exportPng"):
-            self.assertIn(f"function {name}", javascript)
-        self.assertIn("ResizeObserver", javascript)
-        self.assertIn("data.json", javascript)
+    def test_frontend_modules_are_local_and_packaged(self):
+        for script in WEB.glob('*.*'):
+            if script.suffix not in ('.js', '.mjs'):
+                continue
+            for module in re.findall(r"from ['\"](\./[^'\"]+)['\"]", script.read_text()):
+                self.assertTrue((script.parent / module).is_file(), module)
+        html = (WEB / 'index.html').read_text()
+        self.assertNotIn('<iframe', html)
+        self.assertNotIn('https://cdn', html)
 
     def test_placeholder_data_matches_schema(self):
         payload = json.loads((WEB / "data.json").read_text(encoding="utf-8"))

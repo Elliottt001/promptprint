@@ -9,7 +9,7 @@ class ShareBrowserTests(unittest.TestCase):
         from playwright.sync_api import expect
         with feature_page() as page:
             original_url=page.url
-            for size,dimensions in [('square',(1080,1080)),('portrait',(1080,1920)),('landscape',(1600,1000))]:
+            for size,dimensions in [('square',(1080,1080)),('portrait',(1080,1440)),('landscape',(1620,1080))]:
                 page.locator('.share-link').click()
                 expect(page.locator('#share-dialog')).to_have_attribute('open','')
                 page.select_option('#share-size',size)
@@ -19,7 +19,7 @@ class ShareBrowserTests(unittest.TestCase):
                 self.assertEqual(struct.unpack('>II',png[16:24]),dimensions)
                 expect(page.locator('#share-dialog')).not_to_have_attribute('open','')
                 self.assertEqual(page.url,original_url)
-                expect(page.locator('#share-preview')).to_have_count(0)
+                expect(page.locator('#share-preview')).to_have_count(1)
 
     def test_empty_word_cloud_can_switch_to_recap_and_download(self):
         from playwright.sync_api import expect
@@ -64,6 +64,7 @@ class ShareBrowserTests(unittest.TestCase):
             page.locator('.share-link').click();page.select_option('#share-kind','recap')
             with page.expect_download() as first: page.click('#share-export')
             before=Path(first.value.path()).read_bytes()
+            page.click('.main-nav a[href="#recap-section"]')
             page.fill('#recap-anchor','2026-01');page.locator('#recap-anchor').dispatch_event('change')
             expect(page.locator('#recap-messages')).to_have_text('10')
             page.locator('.share-link').click()

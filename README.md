@@ -57,7 +57,7 @@ cd promptprint
 start.cmd
 ```
 
-也可以下载仓库 ZIP，解压后运行 `start.sh` 或双击 `start.cmd`。
+也可以下载仓库 ZIP，解压后在 macOS 上双击 `start.command`，Linux 运行 `start.sh`，Windows 双击 `start.cmd`。
 
 启动脚本会创建项目内的虚拟环境、安装依赖、扫描当前用户的受支持记录，并打开浏览器。默认地址为 **http://127.0.0.1:8765/**；端口被占用时会自动选择空闲端口，以终端显示的地址为准。按 **Ctrl+C** 停止服务。
 

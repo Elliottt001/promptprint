@@ -10,3 +10,10 @@ dist/
 docs/
 
 artifacts/
+
+design-demos/
+
+tests/
+
+design/
+web/.local-preview/
